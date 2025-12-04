@@ -13630,6 +13630,18 @@ JSValue JS_Eval(JSContext *ctx, const char *input, size_t input_len,
     return ret;
 }
 
+JSValue JS_EvalThis(JSContext* ctx, JSValueConst this_obj,
+    const char* input, size_t input_len,
+    const char* filename, int eval_flags)
+{
+	int eval_type = eval_flags & JS_EVAL_TYPE_MASK;
+	JSValue ret;
+
+	assert(eval_type == JS_EVAL_TYPE_GLOBAL || eval_type == JS_EVAL_TYPE_MODULE);
+	ret = JS_EvalInternal(ctx, this_obj, input, input_len, filename, eval_flags, -1);
+	return ret;
+}
+
 int JS_ResolveModule(JSContext *ctx, JSValueConst obj)
 {
     if (JS_VALUE_GET_TAG(obj) == JS_TAG_MODULE) {
