@@ -85,6 +85,14 @@ static JSValue promise_reaction_job(JSContext *ctx, int argc,
     return res2;
 }
 
+void JS_SetHostUnhandledPromiseRejectionTracker(JSRuntime* rt,
+    JSHostPromiseRejectionTracker* cb,
+    void* opaque)
+{
+    rt->host_unhandled_promise_rejection_tracker = cb;
+    rt->host_unhandled_promise_rejection_tracker_opaque = opaque;
+}
+
 void JS_SetHostPromiseRejectionTracker(JSRuntime *rt,
                                        JSHostPromiseRejectionTracker *cb,
                                        void *opaque)
@@ -438,9 +446,25 @@ static JSValue js_new_promise_capability(JSContext *ctx,
     return JS_EXCEPTION;
 }
 
-JSValue JS_NewPromiseCapability(JSContext *ctx, JSValue *resolving_funcs)
+static JSValue JS_NewPromiseCapability(JSContext *ctx, JSValue *resolving_funcs)
 {
     return js_new_promise_capability(ctx, resolving_funcs, JS_UNDEFINED);
+}
+
+JSPromiseStateEnum JS_PromiseState(JSContext* ctx, JSValue promise)
+{
+    JSPromiseData* s = JS_GetOpaque(promise, JS_CLASS_PROMISE);
+    if (!s)
+        return -1;
+    return s->promise_state;
+}
+
+JSValue JS_PromiseResult(JSContext* ctx, JSValue promise)
+{
+    JSPromiseData* s = JS_GetOpaque(promise, JS_CLASS_PROMISE);
+    if (!s)
+        return JS_UNDEFINED;
+    return JS_DupValue(ctx, s->promise_result);
 }
 
 static JSValue js_promise_resolve(JSContext *ctx, JSValueConst this_val,
