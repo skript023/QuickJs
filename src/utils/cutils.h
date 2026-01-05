@@ -64,7 +64,9 @@
 #define countof(x) (sizeof(x) / sizeof((x)[0]))
 #endif
 
+#ifndef BOOL
 typedef int BOOL;
+#endif
 
 #ifndef FALSE
 enum {
