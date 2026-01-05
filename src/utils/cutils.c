@@ -58,17 +58,17 @@ char *pstrcat(char *buf, int buf_size, const char *s)
 
 int strstart(const char *str, const char *val, const char **ptr)
 {
-    const char* cur, * q;
-    cur = str;
+    const char *p, *q;
+    p = str;
     q = val;
     while (*q != '\0') {
-        if (*cur != *q)
+        if (*p != *q)
             return 0;
-        cur++;
+        p++;
         q++;
     }
     if (ptr)
-        *ptr = cur;
+        *ptr = p;
     return 1;
 }
 
