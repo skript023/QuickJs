@@ -68,7 +68,7 @@ int strstart(const char *str, const char *val, const char **ptr)
         q++;
     }
     if (ptr)
-        *ptr = p;
+        *ptr = cur;
     return 1;
 }
 
