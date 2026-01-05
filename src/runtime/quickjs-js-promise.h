@@ -1,11 +1,11 @@
 #ifndef QUICKJS_QUICKJS_JS_PROMISE_H
 #define QUICKJS_QUICKJS_JS_PROMISE_H
 
-typedef enum JSPromiseStateEnum {
-    JS_PROMISE_PENDING,
-    JS_PROMISE_FULFILLED,
-    JS_PROMISE_REJECTED,
-} JSPromiseStateEnum;
+//typedef enum JSPromiseStateEnum {
+//    JS_PROMISE_PENDING,
+//    JS_PROMISE_FULFILLED,
+//    JS_PROMISE_REJECTED,
+//} JSPromiseStateEnum;
 
 typedef struct JSPromiseData {
     JSPromiseStateEnum promise_state;
