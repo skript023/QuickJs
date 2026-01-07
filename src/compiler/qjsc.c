@@ -27,11 +27,16 @@
 #include <inttypes.h>
 #include <string.h>
 #include <assert.h>
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(__clang__)
 #define getpid _getpid
 extern int optind;
 extern char* optarg;
 extern int getopt(int nargc, char * const *nargv, const char *options);
+#elif defined(__clang__) && defined(_WIN32)
+#include <process.h>
+extern int optind;
+extern char* optarg;
+extern int getopt(int nargc, char* const* nargv, const char* options);
 #else
 #include <unistd.h>
 #endif

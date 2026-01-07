@@ -28,30 +28,7 @@
 #include <inttypes.h>
 #include <string.h>
 #include <assert.h>
-#ifdef _MSC_VER
-#include <WinSock2.h>
-int gettimeofday(struct timeval * tp, struct timezone * tzp)
-{
-    static const uint64_t EPOCH = ((uint64_t)116444736000000000ULL);
 
-    SYSTEMTIME  system_time;
-    FILETIME    file_time;
-    uint64_t    time;
-
-    GetSystemTime(&system_time);
-    SystemTimeToFileTime(&system_time, &file_time);
-    time = ((uint64_t)file_time.dwLowDateTime);
-    time += ((uint64_t)file_time.dwHighDateTime) << 32;
-
-    tp->tv_sec = (long)((time - EPOCH) / 10000000L);
-    tp->tv_usec = (long)(system_time.wMilliseconds * 1000);
-
-    return 0;
-}
-
-#else
-#include <sys/time.h>
-#endif
 #include <time.h>
 #include <fenv.h>
 #include <math.h>
@@ -66,6 +43,34 @@ int gettimeofday(struct timeval * tp, struct timezone * tzp)
 #include "quickjs.h"
 #include "quickjs-private.h"
 #include "utils/libregexp.h"
+
+#ifdef _WIN32
+#include <WinSock2.h>
+int gettimeofday(/* struct timeval* */void* tp, /* struct timezone* */void* tzp)
+{
+    static const uint64_t EPOCH = ((uint64_t)116444736000000000ULL);
+    struct timeval* tv ;
+
+    tv = (struct timeval*)tp;
+
+    SYSTEMTIME  system_time;
+    FILETIME    file_time;
+    uint64_t    time;
+
+    GetSystemTime(&system_time);
+    SystemTimeToFileTime(&system_time, &file_time);
+    time = ((uint64_t)file_time.dwLowDateTime);
+    time += ((uint64_t)file_time.dwHighDateTime) << 32;
+
+    tv->tv_sec = (long)((time - EPOCH) / 10000000L);
+    tv->tv_usec = (long)(system_time.wMilliseconds * 1000);
+
+    return 0;
+}
+
+#else
+#include <sys/time.h>
+#endif
 
 #ifdef CONFIG_BIGNUM
 #include "libbf.h"

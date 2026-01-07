@@ -31,7 +31,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#if defined(_WIN32) && defined(_MSC_VER)
+    int gettimeofday(/*struct timeval**/void* tp, /*struct timezone**/void* tzp);
+#endif
 #if defined(__GNUC__) || defined(__clang__)
 #define js_likely(x)          __builtin_expect(!!(x), 1)
 #define js_unlikely(x)        __builtin_expect(!!(x), 0)

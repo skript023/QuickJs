@@ -115,10 +115,8 @@ static char EMSG[] = "";
 #define	EMSG		""
 #endif
 
-static int getopt_internal(int, char * const *, const char *,
-                           const struct option *, int *, int);
-static int parse_long_options(char * const *, const char *,
-                              const struct option *, int *, int);
+//static int getopt_internal(int, char * const *, const char *, const struct option *, int *, int);
+//static int parse_long_options(char * const *, const char *, const struct option *, int *, int);
 static int gcd(int, int);
 static void permute_args(int, int, int, char * const *);
 
@@ -209,29 +207,6 @@ permute_args(int panonopt_start, int panonopt_end, int opt_end,
     }
 }
 
-#ifdef REPLACE_GETOPT
-/*
- * getopt --
- *	Parse argc/argv argument vector.
- *
- * [eventually this will replace the BSD getopt]
- */
-int
-getopt(int nargc, char * const *nargv, const char *options)
-{
-
-    /*
-     * We don't pass FLAG_PERMUTE to getopt_internal() since
-     * the BSD getopt(3) (unlike GNU) has never done this.
-     *
-     * Furthermore, since many privileged programs call getopt()
-     * before dropping privileges it makes sense to keep things
-     * as simple (and bug-free) as possible.
-     */
-    return (getopt_internal(nargc, nargv, options, NULL, NULL, 0));
-}
-#endif /* REPLACE_GETOPT */
-
 //extern int getopt(int nargc, char * const *nargv, const char *options);
 
 #ifdef _BSD_SOURCE
@@ -285,9 +260,7 @@ enum    		/* permitted values for its `has_arg' field...	*/
  *	Parse long options in argc/argv argument vector.
  * Returns -1 if short_too is set and the option does not match long_options.
  */
-static int
-parse_long_options(char * const *nargv, const char *options,
-                   const struct option *long_options, int *idx, int short_too)
+static int parse_long_options(char * const *nargv, const char *options, const struct option *long_options, int *idx, int short_too)
 {
     char *current_argv, *has_equal;
     size_t current_argv_len;
@@ -413,8 +386,7 @@ parse_long_options(char * const *nargv, const char *options,
  * getopt_internal --
  *	Parse argc/argv argument vector.  Called by user level routines.
  */
-static int
-getopt_internal(int nargc, char * const *nargv, const char *options,
+static int getopt_internal(int nargc, char * const *nargv, const char *options,
                 const struct option *long_options, int *idx, int flags)
 {
     char *oli;				/* option letter list index */
@@ -649,5 +621,28 @@ getopt_long_only(int nargc, char * const *nargv, const char *options,
 #ifdef __cplusplus
 }
 #endif
+
+#ifdef REPLACE_GETOPT
+/*
+ * getopt --
+ *	Parse argc/argv argument vector.
+ *
+ * [eventually this will replace the BSD getopt]
+ */
+int
+getopt(int nargc, char* const* nargv, const char* options)
+{
+
+    /*
+     * We don't pass FLAG_PERMUTE to getopt_internal() since
+     * the BSD getopt(3) (unlike GNU) has never done this.
+     *
+     * Furthermore, since many privileged programs call getopt()
+     * before dropping privileges it makes sense to keep things
+     * as simple (and bug-free) as possible.
+     */
+    return (getopt_internal(nargc, nargv, options, NULL, NULL, 0));
+}
+#endif /* REPLACE_GETOPT */
 
 #endif /* !defined(__UNISTD_H_SOURCED__) && !defined(__GETOPT_LONG_H__) */

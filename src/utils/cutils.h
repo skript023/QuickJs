@@ -331,6 +331,10 @@ static inline BOOL dbuf_error(DynBuf *s) {
     return s->error;
 }
 
+static inline BOOL dbuf_set_error(DynBuf *s) {
+    return s->error;
+}
+
 #define UTF8_CHAR_LEN_MAX 6
 
 int unicode_to_utf8(uint8_t *buf, unsigned int c);
