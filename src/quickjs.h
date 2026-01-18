@@ -1158,7 +1158,11 @@ enum {
 
 /* number of typed array types */
 #define JS_TYPED_ARRAY_COUNT  (JS_CLASS_FLOAT64_ARRAY - JS_CLASS_UINT8C_ARRAY + 1)
-static uint8_t const typed_array_size_log2[JS_TYPED_ARRAY_COUNT];
+#ifdef __cplusplus
+extern const uint8_t typed_array_size_log2[JS_TYPED_ARRAY_COUNT];
+#else
+static const uint8_t typed_array_size_log2[JS_TYPED_ARRAY_COUNT];
+#endif
 #define typed_array_size_log2(classid)  (typed_array_size_log2[(classid)- JS_CLASS_UINT8C_ARRAY])
 
 #define JS_MAX_LOCAL_VARS 65536
