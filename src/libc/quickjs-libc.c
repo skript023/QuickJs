@@ -79,7 +79,7 @@
 #define STDERR_FILENO 2
 
 #include "../utils/windows_dirent.h"
-#include <Windows.h>
+#include <windows.h>
 #include <conio.h>
 #ifndef PATH_MAX
 #define PATH_MAX MAX_PATH

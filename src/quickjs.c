@@ -45,7 +45,7 @@
 #include "utils/libregexp.h"
 
 #ifdef _WIN32
-#include <WinSock2.h>
+#include <winsock2.h>
 int gettimeofday(/* struct timeval* */void* tp, /* struct timezone* */void* tzp)
 {
     static const uint64_t EPOCH = ((uint64_t)116444736000000000ULL);

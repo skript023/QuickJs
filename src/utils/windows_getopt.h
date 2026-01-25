@@ -67,7 +67,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
-#include <Windows.h>
+#include <windows.h>
 
 #ifdef __cplusplus
 extern "C" {
